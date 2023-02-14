@@ -63,7 +63,8 @@ class Item(models.Model):
     )
     currency = models.CharField(
         max_length=3,
-        choices=CURRENCY_CHOICES
+        choices=CURRENCY_CHOICES,
+        verbose_name='Валюта'
     )
     price = models.IntegerField(
         verbose_name='Цена',
@@ -90,7 +91,7 @@ class Item(models.Model):
         return f'{self.name}'
 
     def get_display_price(self):
-        return "{0:.2f}".format(self.price / 100)
+        return '{0:.2f}'.format(self.price / 100)
 
 
 class Order(models.Model):
@@ -101,7 +102,8 @@ class Order(models.Model):
         verbose_name='Название подборки',
     )
     items = models.ManyToManyField(
-        Item
+        Item,
+        verbose_name='Товар',
     )
 
     class Meta:
@@ -115,6 +117,10 @@ class Order(models.Model):
 class Transaction(models.Model):
     """Информация о транзакциях."""
 
+    name = models.CharField(
+        max_length=200,
+        verbose_name='Название транзакции',
+    )
     transaction = models.CharField(
         max_length=100,
         verbose_name='Тип совершеной транзакции'
@@ -139,4 +145,4 @@ class Transaction(models.Model):
 
     def __str__(self):
         price = "{0:.2f}".format(self.price / 100)
-        return f'{self.transaction} - {price}'
+        return f'{self.name} - {self.transaction} - {price}'

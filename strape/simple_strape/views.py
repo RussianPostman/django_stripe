@@ -26,6 +26,7 @@ class ItemIntentView(View):
                 currency=current_item.currency,
                 customer=customer['id'],
                 metadata={
+                    'name': current_item.name,
                     'type': 'Item',
                     'item_id': current_item.pk
                 }
@@ -66,6 +67,7 @@ class OrderIntentView(View):
                 currency=order_items[0].currency,  # костыль для выбора валюты
                 customer=customer['id'],
                 metadata={
+                    'name': current_order.name,
                     'type': 'Order',
                     'item_id': current_order.pk
                 }

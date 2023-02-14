@@ -8,7 +8,6 @@ class ItemAdmin(admin.ModelAdmin):
     list_display = ('name', 'description', 'currency', 'price')
     search_fields = ('name', 'currency')
     filter_horizontal = ('tax', 'discount')
-    # list_filter = ('author', 'name', 'tags')
 
 
 class TaxAdmin(admin.ModelAdmin):

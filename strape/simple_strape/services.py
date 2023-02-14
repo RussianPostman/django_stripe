@@ -3,10 +3,14 @@ from .models import Item, Tax, Discount, Transaction, Order
 
 
 def get_display_price(price):
+    """Отображает цену по принципу долларов:центов"""
+
     return '{0:.2f}'.format(price / 100)
 
 
 def get_item_prise(item: Item) -> int:
+    """Пересчитывает цену товара с учётом текущих скидок и налогов"""
+
     item_prise = item.price
     one_percent_item_price = item_prise / 100
     discount_list: list[Discount] = item.discount.all()
@@ -24,10 +28,14 @@ def get_item_prise(item: Item) -> int:
 
 
 def current_obj(id: int, django_model_obj):
+    """Достаёт указанный объект из БД"""
+
     return django_model_obj.objects.get(pk=id)
 
 
 def multi_item_prise(obj_list) -> str:
+    """Формирует общую цену подборки товаров"""
+
     final_price = 0
     for item in obj_list:
         # тут должна быть ф-ция конфертации валют если они разные
@@ -36,12 +44,16 @@ def multi_item_prise(obj_list) -> str:
 
 
 def write_transaction(intent: dict) -> None:
+    """Записывает информацию о совершенной транзакции в БД"""
+
     transaction_type = intent['metadata']['type']
+    name = intent['metadata']['name']
     stripe_customer_id = intent['customer']
     stripe_customer = stripe.Customer.retrieve(stripe_customer_id)
     item = Item.objects.get(pk=intent['metadata']['item_id'])
 
     transaction = Transaction(
+        name=name,
         transaction=transaction_type,
         price=intent['amount'],
         customer=stripe_customer['email']
