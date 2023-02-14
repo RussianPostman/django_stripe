@@ -170,8 +170,12 @@ button:disabled {
     <section>
       <div class="product">
         <div class="description">
-          <h3>{{ item.name }}</h3>
-          <h5>${{ price }}</h5>
+          <h3>{{ order.name }}</h3>
+          <h4>${{ price }} {{ currency }}</h4>
+          <h3>Товар включает в себя:</h3>
+          {% for item in order_items %}
+            <h5> - {{ item.name }}</h5>
+          {% endfor %}
         </div>
       </div>
       <button type="button" id="checkout-button">Checkout</button>
@@ -199,7 +203,7 @@ button:disabled {
     var stripe = Stripe("{{ STRIPE_PUBLIC_KEY }}");
     var checkoutButton = document.getElementById("checkout-button");
     checkoutButton.addEventListener("click", function () {
-      fetch("{% url 'simple_strape:buy' item.id %}", {
+      fetch("{% url 'simple_strape:order_buy' order.id %}", {
         method: "POST",
         headers: {
             'X-CSRFToken': csrftoken
@@ -256,7 +260,7 @@ button:disabled {
     form.addEventListener("submit", function(event) {
       event.preventDefault();
       // Complete payment when the submit button is clicked
-      fetch("{% url 'simple_strape:buy' item.id %}", {
+      fetch("{% url 'simple_strape:order_buy' order.id %}", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",

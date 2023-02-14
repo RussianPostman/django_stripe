@@ -7,7 +7,8 @@ class Tax(models.Model):
 
     name = models.CharField(
         max_length=200,
-        verbose_name='Название налога'
+        verbose_name='Название налога',
+        primary_key=True
     )
     value = models.SmallIntegerField(
         validators=[
@@ -29,7 +30,8 @@ class Discount(models.Model):
 
     name = models.CharField(
         max_length=200,
-        verbose_name='Название скидки'
+        verbose_name='Название скидки',
+        primary_key=True
     )
     value = models.SmallIntegerField(
         validators=[
@@ -58,24 +60,26 @@ class Item(models.Model):
     )
     description = models.TextField(
         verbose_name='Описание'
-        )
+    )
     currency = models.CharField(
         max_length=3,
         choices=CURRENCY_CHOICES
-        )
+    )
     price = models.IntegerField(
         verbose_name='Цена',
         validators=[
             MinValueValidator(50, message='Минимальное значение: 50'),
         ],
-        )
+    )
     tax = models.ManyToManyField(
         Tax,
         verbose_name='Налоги',
+        blank=True,
     )
     discount = models.ManyToManyField(
         Discount,
         verbose_name='Скидки',
+        blank=True,
     )
 
     class Meta:
@@ -94,7 +98,7 @@ class Order(models.Model):
 
     name = models.CharField(
         max_length=200,
-        verbose_name='Название подборки'
+        verbose_name='Название подборки',
     )
     items = models.ManyToManyField(
         Item
@@ -106,3 +110,33 @@ class Order(models.Model):
 
     def __str__(self):
         return f'{self.name}'
+
+
+class Transaction(models.Model):
+    """Информация о транзакциях."""
+
+    transaction = models.CharField(
+        max_length=100,
+        verbose_name='Тип совершеной транзакции'
+    )
+    product = models.ManyToManyField(
+        Item,
+        verbose_name='Товары'
+    )
+    price = models.IntegerField(
+        verbose_name='Цена',
+    )
+    customer = models.EmailField(
+        verbose_name='Клиент',
+    )
+    created = models.DateTimeField(
+        auto_now_add=True,
+        verbose_name='Дата транзакции')
+
+    class Meta:
+        verbose_name = 'Транзакция'
+        verbose_name_plural = 'Транзакции'
+
+    def __str__(self):
+        price = "{0:.2f}".format(self.price / 100)
+        return f'{self.transaction} - {price}'

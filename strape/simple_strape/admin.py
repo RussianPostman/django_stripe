@@ -1,6 +1,6 @@
 from django.contrib import admin
 
-from .models import Item, Tax, Discount, Order
+from .models import Item, Tax, Discount, Order, Transaction
 
 
 class ItemAdmin(admin.ModelAdmin):
@@ -35,7 +35,19 @@ class OrderAdmin(admin.ModelAdmin):
     filter_horizontal = ('items',)
 
 
+class TransactionAdmin(admin.ModelAdmin):
+    list_display = (
+        'view_obj',
+        'customer',
+        'created'
+    )
+
+    def view_obj(self, obj: Transaction):
+        return obj
+
+
 admin.site.register(Order, OrderAdmin)
 admin.site.register(Item, ItemAdmin)
 admin.site.register(Tax, TaxAdmin)
 admin.site.register(Discount, DiscountAdmin)
+admin.site.register(Transaction, TransactionAdmin)
