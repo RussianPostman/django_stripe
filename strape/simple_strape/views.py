@@ -14,6 +14,8 @@ stripe.api_key = settings.STRIPE_SECRET_KEY
 
 
 class ItemIntentView(View):
+    """Создание PaymentIntent для одного товара."""
+
     def post(self, request, *args, **kwargs):
         try:
             current_item = current_obj(self.kwargs.get('item_id'), Item)
@@ -39,6 +41,8 @@ class ItemIntentView(View):
 
 
 class ItemPaymentView(TemplateView):
+    """Отображение одного товара."""
+
     template_name = 'item_checkout.html'
 
     def get_context_data(self, **kwargs):
@@ -54,6 +58,8 @@ class ItemPaymentView(TemplateView):
 
 
 class OrderIntentView(View):
+    """Создание PaymentIntent для подборки товаров."""
+
     def post(self, request, *args, **kwargs):
         try:
             current_order = current_obj(self.kwargs.get('item_id'), Order)
@@ -80,6 +86,8 @@ class OrderIntentView(View):
 
 
 class OrderPaymentView(TemplateView):
+    """Отображение подборки товаров."""
+
     template_name = 'order_checkout.html'
 
     def get_context_data(self, **kwargs):
