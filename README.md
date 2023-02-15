@@ -41,7 +41,14 @@ docker-compose exec web python manage.py makemigrations simple_strape
 docker-compose exec web python manage.py migrate
 docker-compose exec web python manage.py createsuperuser
 docker-compose exec web python manage.py collectstatic --no-input
-docker-compose exec web python manage.py load_data
 ```
-Перейти в браузере по адресу
+
+Для создания и просмотра данный, перейти в браузере по адресу:
+```
+http://127.0.0.1/admin
+```
+Для тестирования процесса покупки:
+```
+http://127.0.0.1/item/view/<int:item_id>/
+http://127.0.0.1/order/view/<int:item_id>/
 ```
