@@ -8,9 +8,7 @@ services:
     env_file:
       - ./.env
   web:
-    build:
-      context: ../strape
-      dockerfile: Dockerfile
+    image: russianpostman/django_stripe:v1
     restart: always
     volumes:
       - static_value:/app/static/
